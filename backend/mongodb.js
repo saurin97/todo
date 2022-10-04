@@ -1,7 +1,8 @@
 // CRUD create read update delete
 
 const { MongoClient } = require('mongodb');
-// const MongoClient = mongodb.MongoClient;
+const mongodb = require('mongodb');
+const ObjectId = mongodb.ObjectId;
 
 const connectionURL = 'mongodb://192.168.1.98:27017';
 const databaseName = 'saurin';
@@ -42,10 +43,28 @@ const addTodo = async (item, callback) => {
 const updateTodo = async (item, callback) => {
 	const cli = await client();
 	const db = await cli.db(databaseName);
+	console.log(item, 'ITEM');
+	const myquery = { _id: ObjectId(item._id) };
 
-	const myquery = { _id: item._id };
+	const data = await db
+		.collection('todo')
+		.findOneAndUpdate(
+			myquery,
+			{ $set: { title: item.title } },
+			{ returnOriginal: false, upsert: false }
+		);
 
-	const data = await db.collection('todo').updateOne(myquery, item);
+	console.log(data, 'data');
+	callback(data.ops);
+};
+
+const deleteTodo = async (id, callback) => {
+	const cli = await client();
+	const db = await cli.db(databaseName);
+	try {
+	} catch (error) {}
+
+	const data = await db.collection('todo').deleteOne({ _id: ObjectId(id) });
 
 	callback(data.ops);
 };
@@ -54,4 +73,5 @@ module.exports = {
 	getTodoList,
 	addTodo,
 	updateTodo,
+	deleteTodo,
 };

@@ -17,17 +17,21 @@ const NewToDo: React.FC<NewTodoProps> = (props) => {
 	useEffect(() => {
 		setInputVal(props.selectedTask?.title);
 	}, [props.selectedTask]);
+
+	const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setInputVal(event.target.value);
+	};
+
 	return (
 		<form onSubmit={todoSubmitHandler}>
 			<div className="form-control">
 				<label htmlFor="todo-text">Todo Text</label>
 				<input
 					type="text"
+					name="title"
 					id="todo-text"
 					value={inputVal}
-					onChange={(event) => {
-						setInputVal(event.target.value);
-					}}
+					onChange={onChange}
 				/>
 			</div>
 			<button type="submit">Submit</button>

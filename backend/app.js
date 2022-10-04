@@ -32,6 +32,13 @@ app.put('/todo/update', (req, res) => {
 	});
 });
 
+app.delete('/todo/:id', (req, res) => {
+	console.log(req.baseUrl, 'log');
+	query.deleteTodo(req.params.id, (data) => {
+		res.send(data);
+	});
+});
+
 app.listen(port, () => {
 	console.log('Server is up on port ' + port);
 });

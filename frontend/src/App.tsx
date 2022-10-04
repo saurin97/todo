@@ -19,10 +19,18 @@ const App: React.FC = () => {
 		}
 
 		if (!!selectedTask._id) {
-			axios.put(`${baseURL}/todo/update`, selectedTask).then((res) => {
-				console.log(res.data, 'res');
-				// setTodos((prevTodos) => [...prevTodos, res.data]);
-			});
+			axios
+				.put(`${baseURL}/todo/update`, { ...selectedTask, title: text })
+				.then((res) => {
+					const todoList = [...todos];
+					const index = todoList.findIndex(
+						(todo) => todo._id === selectedTask._id
+					);
+
+					todoList[index] = { ...selectedTask, title: text };
+
+					setTodos(todoList);
+				});
 		} else {
 			axios.post(`${baseURL}/todo/add`, { title: text }).then((res) => {
 				console.log(res.data, 'res');
@@ -32,8 +40,11 @@ const App: React.FC = () => {
 	};
 
 	const deleteTodoHandler = (todoId: string) => {
-		setTodos((prevTodos) => {
-			return prevTodos.filter((todo) => todo._id !== todoId);
+		axios.delete(`${baseURL}/todo/${todoId}`).then((res) => {
+			console.log(res);
+			setTodos((prevTodos) => {
+				return prevTodos.filter((todo) => todo._id !== todoId);
+			});
 		});
 	};
 
