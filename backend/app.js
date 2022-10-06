@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const query = require('./todo');
+const todo = require('./todo');
 const mongodb = require('./mongodb');
 
 const app = express();
@@ -14,19 +15,19 @@ app.use(
 app.use(express.json());
 
 app.get('/todo', (req, res) => {
-	query.getTodoList((result) => {
+	todo.getTodoList((result) => {
 		res.send(result);
 	});
 });
 
 app.post('/todo/add', (req, res) => {
-	query.addTodo(req.body, (data) => {
+	todo.addTodo(req.body, (data) => {
 		res.send(data);
 	});
 });
 
 app.put('/todo/update', (req, res) => {
-	query.updateTodo(req.body, (data) => {
+	todo.updateTodo(req.body, (data) => {
 		console.log('data', data);
 		res.send(data);
 	});
@@ -34,7 +35,7 @@ app.put('/todo/update', (req, res) => {
 
 app.delete('/todo/:id', (req, res) => {
 	console.log(req.baseUrl, 'log');
-	query.deleteTodo(req.params.id, (data) => {
+	todo.deleteTodo(req.params.id, (data) => {
 		res.send(data);
 	});
 });

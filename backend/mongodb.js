@@ -13,14 +13,18 @@ const initDb = (callback) => {
 		return callback(null, database);
 	}
 
-	MongoClient.connect(connectionURL, databaseName, (err, client) => {
-		if (err) {
-			return callback(err);
+	MongoClient.connect(
+		connectionURL,
+		{ useNewUrlParser: true },
+		(err, client) => {
+			if (err) {
+				return callback(err);
+			}
+			console.log('DB initialized - connected to: ' + databaseName);
+			database = client.db(databaseName);
+			return callback(null, database);
 		}
-		console.log('DB initialized - connected to: ' + databaseName);
-		database = client.db(databaseName);
-		return callback(null, database);
-	});
+	);
 };
 
 const getDb = () => {
